@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.2",
         "knpuniversity/oauth2-client-bundle": "^2.18",
+        "kreait/firebase-php": "^7.0",
         "league/oauth2-client": "^2.7",
         "league/oauth2-github": "^3.1",
         "lexik/jwt-authentication-bundle": "^3.1",
