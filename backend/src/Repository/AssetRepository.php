@@ -31,13 +31,14 @@ class AssetRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Asset
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+       public function findByLast($column): array
+       {
+           return $this->createQueryBuilder('a')
+           ->orderBy('a.' . $column, 'DESC') 
+           ->setMaxResults(8)
+           ->getQuery()
+           ->getResult();
+           ;
+       }
+       
 }

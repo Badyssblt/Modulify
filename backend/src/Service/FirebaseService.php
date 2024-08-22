@@ -29,4 +29,18 @@ class FirebaseService
 
         return $tempFile;
     }
+
+    public function uploadFile($file): string
+    {
+        $bucket = $this->storage->getBucket();
+        $filePath = $file->getClientOriginalName();
+        $bucket->upload(
+            fopen($file->getPathname(), 'r'),
+            [
+                'name' => $filePath
+            ]
+        );
+
+        return $filePath;
+    }
 }

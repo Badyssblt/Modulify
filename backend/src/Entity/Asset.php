@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\AssetRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: AssetRepository::class)]
@@ -15,18 +17,23 @@ class Asset
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['collection:asset', 'item:asset'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['collection:asset', 'item:asset'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['collection:asset', 'item:asset'])]
     private ?int $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['item:asset'])]
     private ?string $file = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['item:asset'])]
     private ?string $description = null;
 
     #[ORM\Column]
@@ -35,10 +42,11 @@ class Asset
     #[ORM\Column]
     private ?bool $is_public = null;
 
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
+    #[Vich\UploadableField(mapping: 'asset', fileNameProperty: 'imageName', size: 'imageSize')]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['collection:asset', 'item:asset'])]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]
@@ -46,6 +54,15 @@ class Asset
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column]
+    private ?int $total_download = null;
+
+    public function __construct() {
+        $this->created_at = new DateTimeImmutable();
+        $this->is_public = false;
+        $this->total_download = 0;
+    }
 
     public function getId(): ?int
     {
@@ -167,5 +184,37 @@ class Asset
     public function getImageSize(): ?int
     {
         return $this->imageSize;
+    }
+
+    public function getTotalDownload(): ?int
+    {
+        return $this->total_download;
+    }
+
+    public function setTotalDownload(int $total_download): static
+    {
+        $this->total_download = $total_download;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of updatedAt
+     */ 
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set the value of updatedAt
+     *
+     * @return  self
+     */ 
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 }
