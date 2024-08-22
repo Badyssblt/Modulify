@@ -43,4 +43,17 @@ class FirebaseService
 
         return $filePath;
     }
+
+    public function deleteFile($file): string
+    {
+        $bucket = $this->storage->getBucket();
+        $object = $bucket->object($file);
+
+        if($object->exists()){
+            $object->delete();
+            return true;
+        }
+
+        return false;
+    }
 }

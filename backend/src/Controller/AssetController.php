@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class AssetController extends AbstractController
 {
@@ -32,10 +33,35 @@ class AssetController extends AbstractController
         $assetArray['popular'] = $assetRepository->findByLast('total_download');
         $assetArray['created_at'] = $assetRepository->findByLast('created_at');
 
-        dd($assetArray);
+        return $this->json($assetArray, Response::HTTP_OK, [], ['groups' => ['collection:asset']]);
                         
     }
 
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas la permission pour modifier ce contenu')]
+    #[Route('/asset/{id}', name: 'app_asset_delete', methods: ['DELETE'])]
+    public function delete(Asset $asset, EntityManagerInterface $manager, FirebaseService $firebaseService)
+    {
+        try {
+            $deleted = $firebaseService->deleteFile($asset->getFile());
+            if($deleted){
+                $manager->remove($asset);
+                $manager->flush();    
+            }else {
+                return $this->json(['message' => 'Une erreur est survenue lors de la suppression du fichier dans FireBase']);
+            }
+            return $this->json([], Response::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('/asset/{id}', name: 'app_assets_item')]
+    public function get(Asset $asset)
+    {
+        return $this->json($asset, Response::HTTP_OK, [], ['groups' => ['item:asset']]);
+    }
+
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas la permission pour modifier ce contenu')]
     #[Route('/asset', name: 'app_asset_create', methods: ['POST'])]
     public function createAsset(Request $request, EntityManagerInterface $manager, FirebaseService $firebaseService)
     {
@@ -65,7 +91,7 @@ class AssetController extends AbstractController
         return $this->json($asset, Response::HTTP_CREATED, [], ['groups' => ['item:asset']]);
     }
 
-
+    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas la permission pour modifier ce contenu')]
     #[Route('/asset/{id}', name: 'app_asset_update', methods: ['PATCH'])]
     public function updateAsset(Request $request, EntityManagerInterface $manager, FirebaseService $firebaseService, Asset $asset): Response 
     {
@@ -108,13 +134,7 @@ class AssetController extends AbstractController
     }
 
 
-    #[Route('/asset/{id}', name: 'app_asset_delete', methods: ['DELETE'])]
-    public function delete(Asset $asset, EntityManagerInterface $manager)
-    {
-        $manager->remove($asset);
-        $manager->flush();
 
-        return $this->json([], Response::HTTP_NO_CONTENT);
-    }
+
 
 }
