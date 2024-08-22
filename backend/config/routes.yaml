@@ -6,3 +6,10 @@ controllers:
     prefix: '/api'
 api_login_check:
     path: /api/login_check
+github_connect:
+    path: /auth/github
+    controller: App\Controller\GithubController::connectAction
+
+github_check:
+    path: /auth/github/check
+    controller: App\Controller\GithubController::connectCheckAction

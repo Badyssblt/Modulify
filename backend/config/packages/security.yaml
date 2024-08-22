@@ -17,6 +17,10 @@ security:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        github:
+            pattern: ^/auth/github
+            stateless: false  # Assurez-vous que cette ligne est absente ou définie sur false
+            # Autres configurations pour le firewall
 
         api:
             pattern:   ^/api
