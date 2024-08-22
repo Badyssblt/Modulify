@@ -3,5 +3,6 @@
 /backend/public/bundles/
 /backend/var/
 /backend/vendor/
+/backend/modulify.json
 ###< symfony/framework-bundle ###
 
