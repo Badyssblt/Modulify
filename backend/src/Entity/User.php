@@ -68,6 +68,7 @@ namespace App\Entity;
          * @var Collection<int, Asset>
          */
         #[ORM\ManyToMany(targetEntity: Asset::class, inversedBy: 'followers')]
+        #[Groups(['item:user'])]
         private Collection $follow_asset;
 
         public function __construct() {

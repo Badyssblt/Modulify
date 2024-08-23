@@ -19,15 +19,15 @@ class Asset
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['collection:asset', 'item:asset'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['collection:asset', 'item:asset'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['collection:asset', 'item:asset'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
     private ?int $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -39,6 +39,7 @@ class Asset
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['collection:asset', 'item:asset'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
@@ -48,7 +49,7 @@ class Asset
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['collection:asset', 'item:asset'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]
@@ -58,6 +59,7 @@ class Asset
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
+    #[Groups(['collection:asset'])]
     private ?int $total_download = null;
 
     /**
@@ -66,11 +68,19 @@ class Asset
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'follow_asset')]
     private Collection $followers;
 
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'asset')]
+    #[Groups(['collection:asset', 'item:asset'])]
+    private Collection $categories;
+
     public function __construct() {
         $this->created_at = new DateTimeImmutable();
         $this->is_public = false;
         $this->total_download = 0;
         $this->followers = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -249,6 +259,33 @@ class Asset
     {
         if ($this->followers->removeElement($follower)) {
             $follower->removeFollowAsset($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->addAsset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            $category->removeAsset($this);
         }
 
         return $this;
