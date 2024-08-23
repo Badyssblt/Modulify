@@ -6,3 +6,5 @@
 /backend/modulify.json
 ###< symfony/framework-bundle ###
 
+/.gitignore
+/backend/public/image/*

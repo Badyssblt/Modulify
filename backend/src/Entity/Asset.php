@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\AssetRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -58,10 +60,17 @@ class Asset
     #[ORM\Column]
     private ?int $total_download = null;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'follow_asset')]
+    private Collection $followers;
+
     public function __construct() {
         $this->created_at = new DateTimeImmutable();
         $this->is_public = false;
         $this->total_download = 0;
+        $this->followers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -214,6 +223,33 @@ class Asset
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+
+    public function addFollower(User $follower): static
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers->add($follower);
+            $follower->addFollowAsset($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFollower(User $follower): static
+    {
+        if ($this->followers->removeElement($follower)) {
+            $follower->removeFollowAsset($this);
+        }
 
         return $this;
     }
