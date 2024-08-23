@@ -1,6 +1,15 @@
 <template>
-  <div>
+  <div class="bg-background min-h-screen text-white">
     <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+    <NuxtPage/>
   </div>
 </template>
+
+
+<style >
+  body {
+    font-family: Inter;
+  }
+
+  
+</style>
