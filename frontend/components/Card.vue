@@ -6,7 +6,7 @@
     <div class="py-3 px-4">
         <div class="flex justify-between">
             <h2 class="font-medium">{{ asset.name }}</h2>
-            <h3 class="font-medium">{{ asset.price === 0 ? 'Gratuit' : asset.price }}</h3>
+            <h3 class="font-medium">{{ asset.price === 0 ? 'Gratuit' : asset.price + ' €' }}</h3>
         </div>
         <div class="mt-3">
             <div class="flex items-center gap-2">
@@ -25,12 +25,12 @@
 </template>
 
 <script setup>
-
 defineProps({
     asset: {
         type: Object, 
     }
 })
+
 
 
 </script>
