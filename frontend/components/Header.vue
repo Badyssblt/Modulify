@@ -1,7 +1,7 @@
 <template>
     <header class="py-6 flex justify-between px-6">
         <NuxtLink to="/"><h1 class="text-lg">Modulify</h1></NuxtLink>
-        <div v-if="showMenu" class="fixed top-0 right-0 w-full h-screen bg-background z-50">
+        <div v-if="showMenu" class="fixed top-0 right-0 w-full h-screen bg-background z-50" style="z-index: 300">
             <div class="relative h-full">
                 <div class="flex flex-col justify-center h-full items-center">
                     <NuxtLink>Composants</NuxtLink>
@@ -41,6 +41,7 @@ import { useAuth } from "@/store/auth.js"
 
     const isAuthenticated = store.isAuthenticated
 
+    console.log(store.user);
 
     const showMenu = ref(false);
 
