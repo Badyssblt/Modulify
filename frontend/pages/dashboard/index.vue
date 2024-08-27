@@ -1,9 +1,15 @@
 <template>
-  <div class="px-6">
+  <div class="absolute w-32 h-32 bg-primary rounded-full blur-[90px] top-96 left-2">
+    </div>
+      <div class="absolute w-32 h-32 bg-primary rounded-full blur-[90px] top-44 left-72">
+      </div>
+      <div class="absolute w-32 h-32 bg-primary rounded-full blur-[90px] top-72 right-0">
+      </div>
+  <div class="px-6 md:flex relative z-50">
        <DashboardAside current="profile"/>
-        <div>
+        <div class="md:flex md:flex-col md:items-center w-full">
             <h2 class="text-center text-lg mt-8 font-medium">Mon compte</h2>
-            <form @submit.prevent="handleSubmit">
+            <form @submit.prevent="handleSubmit" class="md:flex md:flex-col md:gap-4">
               <Warning class="my-4">
                 Vous ne pouvez pas modifier vos informations en raison de votre méthode de connexion <b>(Github)</b>
               </Warning>

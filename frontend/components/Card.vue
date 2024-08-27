@@ -1,6 +1,6 @@
 <template>
   <!-- Utilisez NuxtLink seul sans imbriquer un article cliquable à l'intérieur -->
-  <NuxtLink :to="`/asset/${asset.id}`" class="bg-secondary w-full h-fit rounded-md block">
+  <NuxtLink :to="`/asset/${asset.id}`" class="bg-secondary w-full h-fit rounded-md block md:w-96">
     <!-- Article n'est plus cliquable, seulement un conteneur de contenu -->
     <article class="w-full h-fit">
       <div class="w-full h-48 relative overflow-hidden">
