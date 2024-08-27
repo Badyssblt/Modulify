@@ -1,7 +1,15 @@
 <template>
   <label class="flex flex-col">
-        {{ label }}
-    <input :type="type" v-model="model" class="text-white px-4 py-2 rounded-full focus:outline-none bg-background" :placeholder="placeholder">
+    {{ label }}
+    <input
+      :type="type"
+      v-model="model"
+      :class="[
+        'text-white px-4 py-2 rounded-full focus:outline-none',
+        color === 'primary' ? 'bg-background' : 'bg-secondary'
+      ]"
+      :placeholder="placeholder"
+    />
   </label>
 </template>
 
@@ -20,6 +28,10 @@
             type: String,
             default: ""
         },
+        color: {
+            type: String,
+            default: "primary"
+        }
     })
 </script>
 

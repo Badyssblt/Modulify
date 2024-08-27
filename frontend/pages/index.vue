@@ -15,7 +15,7 @@
       </p>
       <div>
         <Button class="w-full">S'inscrire</Button>
-        <Input placeholder="Symfony template..." class="mt-2" />
+        <Input placeholder="Symfony template..." class="mt-2" color="secondary"/>
       </div>
     </div>
     <div class="mt-24 px-6 relative">
