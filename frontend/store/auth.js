@@ -1,21 +1,24 @@
-
 export const useAuth = defineStore('auth', () => {
     const user = ref(null);
     const token = ref('');
 
-    const isAuthenticated = computed(() => user !== null);
-
+    const isAuthenticated = computed(() => user.value !== null);
 
     const authenticate = (newUser) => {
         user.value = newUser;
-        console.log(user.value);
+    }
+
+    const logout = () => {
+        user.value = null;
+        token.value = null;
     }
 
     return {
         user, 
         authenticate,
         token,
-        isAuthenticated
+        isAuthenticated,
+        logout
     }
 }, { persist: {
     storage: persistedState.cookiesWithOptions({

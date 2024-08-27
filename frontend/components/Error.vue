@@ -1,9 +1,9 @@
 <template>
   <div
     role="alert"
-    class="rounded border-s-4 border-amber-500 bg-red-50 p-4 dark:border-amber-600 dark:bg-amber-900"
+    class="rounded border-s-4 border-red-500 bg-red-50 p-4 dark:border-red-600 dark:bg-red-900"
   >
-    <div class="flex items-center gap-2 text-amber-800 dark:text-amber-100">
+    <div class="flex items-center gap-2 text-red-800 dark:text-red-100">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
         <path
           fill-rule="evenodd"
@@ -12,10 +12,10 @@
         />
       </svg>
   
-      <strong class="block font-medium"> Attention </strong>
+      <strong class="block font-medium"> Une erreur est survenue </strong>
     </div>
   
-    <p class="mt-2 text-sm text-amber-700 dark:text-amber-200">
+    <p class="mt-2 text-sm text-red-700 dark:text-red-200">
       <slot/>
     </p>
   </div>

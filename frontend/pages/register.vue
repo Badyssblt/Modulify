@@ -18,7 +18,7 @@
             </NuxtLink>
         </div>
         
-        <Warning class="mt-4" v-if="error">Email ou mot de passe invalide</Warning>
+        <Error class="mt-4" v-if="error">Email ou mot de passe invalide</Error>
     </form>
     <div class="bg-background w-full h-96 py-8 mt-4 rounded-md relative px-4">
         <div class="absolute w-24 h-24 bg-primary rounded-full blur-[45px] bottom-12 left-12">

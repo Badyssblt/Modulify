@@ -4,10 +4,7 @@
         <div v-if="showMenu" class="fixed top-0 right-0 w-full h-screen bg-background z-50" style="z-index: 300">
             <div class="relative h-full">
                 <div class="flex flex-col justify-center h-full items-center">
-                    <NuxtLink>Composants</NuxtLink>
-                    <NuxtLink>
-                        Templates
-                    </NuxtLink>
+                    <NuxtLink to="/assets" @click="toggleMenu">Tous les assets</NuxtLink>
                 </div>
                 <div class="absolute right-6 top-6">
                     <button @click="toggleMenu">
@@ -21,7 +18,7 @@
         <div class="flex gap-4">
             <div class="w-8" v-if="isAuthenticated">
                <div class="w-full h-8 relative overflow-hidden">
-                    <img :src="store.user.profilePicture ? store.user.profilePicture : 'images/default.jpg'" alt="" class="absolute inset-0 w-full h-full object-cover rounded-full">
+                    <img :src="store.user && store.user.profilePicture ? store.user.profilePicture : 'images/default.jpg'" alt="" class="absolute inset-0 w-full h-full object-cover rounded-full">
                </div> 
             </div>
             <button @click="toggleMenu">
@@ -39,15 +36,20 @@ import { useAuth } from "@/store/auth.js"
 
     const store = useAuth();
 
-    const isAuthenticated = store.isAuthenticated
-
-    console.log(store.user);
+    const isAuthenticated = ref(store.isAuthenticated);
 
     const showMenu = ref(false);
 
     const toggleMenu = () => {
         showMenu.value = !showMenu.value;
     }
+
+watch(
+    () => store.isAuthenticated,
+    (newVal) => {
+        isAuthenticated.value = newVal;
+    }
+);
 </script>
 
 <style>
