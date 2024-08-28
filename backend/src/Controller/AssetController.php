@@ -75,6 +75,9 @@ class AssetController extends AbstractController
         $asset->setName($formdata['name']);
         $asset->setPrice($formdata['price']);
         $asset->setDescription($formdata['description']);
+        $asset->setHow($formdata['how']);
+        $asset->setVersion($formdata['version']);
+        $asset->setPublic($formdata['visibility']);
 
         if ($image instanceof UploadedFile) {
             $asset->setImageFile($image);

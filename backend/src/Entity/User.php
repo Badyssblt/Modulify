@@ -4,6 +4,7 @@ namespace App\Entity;
 
     use Doctrine\Common\Collections\ArrayCollection;
     use Doctrine\Common\Collections\Collection;
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use App\Repository\UserRepository;
     use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -70,6 +71,9 @@ namespace App\Entity;
         #[ORM\ManyToMany(targetEntity: Asset::class, inversedBy: 'followers')]
         #[Groups(['item:user'])]
         private Collection $follow_asset;
+
+        #[ORM\Column(type: Types::TEXT, nullable: true)]
+        private ?string $github_token = null;
 
         public function __construct() {
             $this->is_verified = false;
@@ -261,6 +265,18 @@ namespace App\Entity;
         public function removeFollowAsset(Asset $followAsset): static
         {
             $this->follow_asset->removeElement($followAsset);
+
+            return $this;
+        }
+
+        public function getGithubToken(): ?string
+        {
+            return $this->github_token;
+        }
+
+        public function setGithubToken(?string $github_token): static
+        {
+            $this->github_token = $github_token;
 
             return $this;
         }

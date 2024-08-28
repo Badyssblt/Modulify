@@ -19,37 +19,38 @@ class Asset
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user', 'collection:admin:asset'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user', 'collection:admin:asset'])]
     private ?string $name = null;
 
     #[ORM\Column]
-    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user', 'collection:admin:asset'])]
     private ?int $price = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['item:asset'])]
+    #[Groups(['item:asset', 'collection:admin:asset'])]
     private ?string $file = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['item:asset'])]
+    #[Groups(['item:asset', 'collection:admin:asset'])]
     private ?string $description = null;
 
     #[ORM\Column]
-    #[Groups(['collection:asset', 'item:asset'])]
+    #[Groups(['collection:asset', 'item:asset', 'collection:admin:asset'])]
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
+    #[Groups(['collection:admin:asset'])]
     private ?bool $is_public = null;
 
     #[Vich\UploadableField(mapping: 'asset', fileNameProperty: 'imageName', size: 'imageSize')]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['collection:asset', 'item:asset', 'item:user'])]
+    #[Groups(['collection:asset', 'item:asset', 'item:user', 'collection:admin:asset'])]
     private ?string $imageName = null;
 
     #[ORM\Column(nullable: true)]
@@ -59,7 +60,7 @@ class Asset
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
-    #[Groups(['collection:asset'])]
+    #[Groups(['collection:asset', 'collection:admin:asset'])]
     private ?int $total_download = null;
 
     /**
@@ -74,6 +75,14 @@ class Asset
     #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'asset')]
     #[Groups(['collection:asset', 'item:asset'])]
     private Collection $categories;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['collection:asset', 'item:asset', 'item:user', 'collection:admin:asset'])]
+    private ?string $how = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['collection:asset', 'item:asset', 'item:user', 'collection:admin:asset'])]
+    private ?string $version = null;
 
     public function __construct() {
         $this->created_at = new DateTimeImmutable();
@@ -287,6 +296,30 @@ class Asset
         if ($this->categories->removeElement($category)) {
             $category->removeAsset($this);
         }
+
+        return $this;
+    }
+
+    public function getHow(): ?string
+    {
+        return $this->how;
+    }
+
+    public function setHow(string $how): static
+    {
+        $this->how = $how;
+
+        return $this;
+    }
+
+    public function getVersion(): ?string
+    {
+        return $this->version;
+    }
+
+    public function setVersion(string $version): static
+    {
+        $this->version = $version;
 
         return $this;
     }
