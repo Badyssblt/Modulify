@@ -1,7 +1,7 @@
 <template>
     <div >
         <div class="px-6 md:flex gap-32 md:px-12 md:pt-24">
-            <div>
+            <div class="md:w-1/2">
                 <h2 class="text-lg font-medium md:text-xl">{{ asset.name }}</h2>
                 <p class="text-white/60 text-sm">{{ asset.description }}</p>
                 <div>
@@ -20,11 +20,11 @@
         <div class="bg-secondary/70 py-20">
             <div class="px-6 border-b pb-14 md:flex md:justify-between">
                 <h2 class="text-lg md:text-xl">Comment utiliser cet asset ?</h2>
-                <p class="text-sm text-white/60 md:w-1/3 md:mr-24">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil inventore velit temporibus dolores quasi! Atque laboriosam unde omnis ullam voluptates inventore soluta veritatis similique consequatur eum ut sapiente, fuga quas?</p>
+                <p class="text-sm text-white/60 md:w-1/3 md:mr-24">{{ asset.how }}</p>
             </div>
            <div class="px-6 border-b py-14 md:flex md:justify-between">
                 <h2 class="text-lg md:text-xl">Version de cet asset</h2>
-                <p class="text-sm text-white/60 md:w-1/3 md:mr-24">NextJS 14</p>
+                <p class="text-sm text-white/60 md:w-1/3 md:mr-24">{{ asset.version }}</p>
             </div>
         </div>
     </div>
