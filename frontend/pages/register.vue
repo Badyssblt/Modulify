@@ -1,8 +1,8 @@
 <template>
-<div class="bg-secondary/40 py-6 backdrop-blur-md mx-4 px-4 flex flex-col rounded-md md:flex-row">
-    <form @submit.prevent="handleSubmit">
-        <h2 class="text-lg font-medium my-2">Inscrivez-vous</h2>
-        <Input label="Name" placeholder="John Doe" v-model="name"/>
+<div class="bg-secondary/40 py-6 backdrop-blur-md mx-4 px-4 flex flex-col rounded-md md:flex-row md:justify-between md:w-7/12 md:gap-8 md:m-0 md:m-auto md:px-8">
+    <form @submit.prevent="handleSubmit" class="md:w-full">
+        <h2 class="text-lg font-medium my-2 md:text-xl">Inscrivez-vous</h2>
+        <Input label="Nom" placeholder="John Doe" v-model="name"/>
         <Input label="Email" placeholder="johndoe@example.com" v-model="email" type="email"/>
         <Input label="Mot de passe" placeholder="********" type="password" class="mt-4" v-model="password"/>
         <div class="flex justify-end mt-2">
@@ -17,16 +17,17 @@
             </div>
             </NuxtLink>
         </div>
+        <NuxtLink to="/login" class="text-sm opacity-70 underline text-center w-full flex justify-center mt-4">Ou se connecter</NuxtLink>
         
         <Error class="mt-4" v-if="error">Email ou mot de passe invalide</Error>
     </form>
-    <div class="bg-background w-full h-96 py-8 mt-4 rounded-md relative px-4">
+    <div class="bg-background w-full h-96 py-8 mt-4 rounded-md relative px-4 md:w-fit">
         <div class="absolute w-24 h-24 bg-primary rounded-full blur-[45px] bottom-12 left-12">
       </div>
       <div class="absolute w-24 h-24 bg-[#16ADAD] rounded-full blur-[45px] top-32 right-12">
       </div>
-        <h2 class="text-lg">CITATION</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo repellat</p>
+        <p class="italic opacity-70 text-center max-w-xl min-w-72"><span class="font-bold">"</span>{{ quote[0]['q'] }}<span class="font-bold">"</span></p>
+        <h2 class="text-lg text-right">{{ quote[0]['a'] }}</h2>
     </div>
 
 </div>
@@ -38,6 +39,7 @@ import cookie from "js-cookie";
 import { useAuth } from "@/store/auth"
 import { jwtDecode } from "jwt-decode";
 
+const config = useRuntimeConfig();
 
     const store = useAuth();
     const { $api } = useNuxtApp();
@@ -61,6 +63,12 @@ import { jwtDecode } from "jwt-decode";
             console.log(error.value);
         }
     }
+
+
+const { data:quote } = await useFetch(config.public.API_URL + "/api/quote");
+
+console.log(quote);
+
 </script>
 
 <style>

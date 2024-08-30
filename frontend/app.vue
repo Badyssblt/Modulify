@@ -1,4 +1,5 @@
 <template>
+  <NuxtLoadingIndicator/>
   <div class="bg-background min-h-screen text-white">
     <Header/>
     <NuxtPage/>
