@@ -66,13 +66,20 @@
     const query = ref('');
     const originalAssets = ref([]);
 
+    const nuxt = useNuxtApp()
+
     const config = useRuntimeConfig();
-    const { data: assets } = await useFetch(config.public.API_URL + '/api/assets');
-    console.log(assets);
+    const { data: assets, refresh, pending, error } = await useFetch(config.public.API_URL + '/api/assets', {
+      key: 'unique-key',
+      getCachedData: (key) => null,
+      immediate: true, 
+    });
+        
+
     originalAssets.value = [...assets.value];
 
     const sortAssets = () => {
-  let sortedAssets = [...originalAssets.value]; // Utiliser les assets d'origine
+  let sortedAssets = [...originalAssets.value]; 
 
   // Filtrer par nom si une requête est présente
   if (query.value) {
@@ -117,6 +124,7 @@ const handleSearchInput = () => {
   }
   sortAssets();
 };
+
 
 
 </script>

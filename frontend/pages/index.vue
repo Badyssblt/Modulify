@@ -87,7 +87,11 @@ import { useAuth } from "@/store/auth"
 
     const store = useAuth();
   const config = useRuntimeConfig();
-  const { data: assets } = await useFetch(config.public.API_URL + '/api/assets');
+  const { data: assets } = await useFetch(config.public.API_URL + '/api/assets', {
+    key: 'unique-key',
+    getCachedData: (key) => null,
+    immediate: true
+  });
 
   const activeSort = ref('created_at');
 
