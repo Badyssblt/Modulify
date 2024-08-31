@@ -42,7 +42,7 @@ class GithubController extends AbstractController
 
             $existingUser = $userRepository->findOneBy(['email' => $email]);
 
-            $response = new RedirectResponse('http://localhost:3000/auth/github?success=true');
+            $response = new RedirectResponse('https://modulify.badyssblilita.fr/auth/github?success=true');
 
             if (!$existingUser) {
                 $newUser = new User();
