@@ -32,6 +32,5 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   );
 
-  // Injecter l'instance Axios dans l'application sous le nom $api
   nuxtApp.provide("api", api);
 });

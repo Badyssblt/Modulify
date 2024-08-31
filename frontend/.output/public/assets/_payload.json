@@ -1,1 +1,1 @@
-[{"data":1,"prerenderedAt":4},["ShallowReactive",2],{"i2GNkxiGpp":3},[],1724933826869]
+[{"data":1,"prerenderedAt":13},["ShallowReactive",2],{"i2GNkxiGpp":3},[4],{"id":5,"name":6,"price":7,"created_at":8,"imageName":9,"total_download":7,"categories":10,"how":11,"version":12},1,"Plugin Axios Nuxt3",0,"2024-08-30T14:36:00+00:00","axios-66d1d8d0f115b209893369.png",[],"Importer le fichier dans votre projet Nuxt dans le dossier \"plugins\" à la racine. Vous pouvez maintenant accéder au plugin avec comme nom \"api\"","Nuxt3 ",1725028757285]

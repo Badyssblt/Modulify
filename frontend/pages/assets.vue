@@ -68,6 +68,7 @@
 
     const config = useRuntimeConfig();
     const { data: assets } = await useFetch(config.public.API_URL + '/api/assets');
+    console.log(assets);
     originalAssets.value = [...assets.value];
 
     const sortAssets = () => {

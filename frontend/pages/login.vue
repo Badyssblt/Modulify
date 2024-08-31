@@ -72,7 +72,8 @@ import axios from 'axios';
 
                 store.authenticate({
                     email: decoded.username,
-                    name: decoded.name
+                    name: decoded.name,
+                    role: decoded.roles
                 })
 
                 // Défini la connexion par défaut

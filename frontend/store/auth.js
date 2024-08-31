@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 export const useAuth = defineStore('auth', () => {
     const user = ref(null);
     const token = ref('');
@@ -13,12 +15,13 @@ export const useAuth = defineStore('auth', () => {
         token.value = null;
     }
 
+
     return {
         user, 
         authenticate,
         token,
         isAuthenticated,
-        logout
+        logout,
     }
 }, { persist: {
     storage: persistedState.cookiesWithOptions({
