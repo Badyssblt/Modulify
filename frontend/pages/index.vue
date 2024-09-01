@@ -16,7 +16,7 @@
         </p>
         <div class="md:flex md:gap-4">
           <div class="flex items-center md:w-auto w-full">
-            <NavLink class="w-full md:w-auto md:px-12" to="/register" v-if="!store.isAuthenticated">
+            <NavLink class="w-full md:w-auto md:px-12 md:text-nowrap" to="/register" v-if="!store.isAuthenticated">
               S'inscrire
             </NavLink>
             <NavLink class="w-full md:w-auto md:px-12 md:text-nowrap" to="/dashboard" v-else>
@@ -27,6 +27,8 @@
             placeholder="Symfony template..."
             class="mt-2 md:mt-0 md:flex-grow md:w-full"
             color="secondary"
+            v-model="title"
+            @keyup.enter="submitSearch"
           />
         </div>
       </div>
@@ -85,6 +87,12 @@
 <script setup>
 import { useAuth } from "@/store/auth"
 
+useHead({
+  title: 'Accueil'
+})
+
+    const title = ref('');
+
     const store = useAuth();
   const config = useRuntimeConfig();
   const { data: assets } = await useFetch(config.public.API_URL + '/api/assets', {
@@ -107,5 +115,13 @@ import { useAuth } from "@/store/auth"
       return 0;
     });
   });
+
+
+  const router = useRouter();
+  const submitSearch = () => {
+  if (title.value.trim()) {
+    router.push({ path: "/assets", query: { title: title.value } });
+  }
+};
 </script>
 

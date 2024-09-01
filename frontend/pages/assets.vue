@@ -53,56 +53,51 @@
         </div>
     </div>
     <Wrapper class="mt-4 relative z-20">
-        <Card v-for="asset in assets" :key="asset.id" :asset="asset" />
+        <Card v-for="asset in assets " :key="asset.id" :asset="asset" />
       </Wrapper>
   </div>
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
+import { useFetch, useRuntimeConfig } from 'nuxt/app';
 
-    const date = ref('');
-    const trending = ref('');
-    const price = ref('');
-    const query = ref('');
-    const originalAssets = ref([]);
+const date = ref('');
+const trending = ref('');
+const price = ref('');
+const query = ref('');
 
-    const nuxt = useNuxtApp()
+const config = useRuntimeConfig();
+const { data: fetchedAssets } = await useFetch(config.public.API_URL + '/api/assets', {
+  key: 'unique-key',
+  getCachedData: (key) => null,
+  immediate: true, 
+  default: () => []
+});
 
-    const config = useRuntimeConfig();
-    const { data: assets, refresh, pending, error } = await useFetch(config.public.API_URL + '/api/assets', {
-      key: 'unique-key',
-      getCachedData: (key) => null,
-      immediate: true, 
-    });
-        
+const assets = ref([...fetchedAssets.value]);
 
-    originalAssets.value = [...assets.value];
+const sortAssets = () => {
+  let sortedAssets = [...fetchedAssets.value]; 
 
-    const sortAssets = () => {
-  let sortedAssets = [...originalAssets.value]; 
-
-  // Filtrer par nom si une requête est présente
   if (query.value) {
     sortedAssets = sortedAssets.filter(asset =>
       asset.name.toLowerCase().includes(query.value.toLowerCase())
     );
   }
 
-  // Trier par date
   if (date.value === 'new') {
     sortedAssets.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   } else if (date.value === 'old') {
     sortedAssets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
   }
 
-  // Trier par tendance
   if (trending.value === 'more_tendance') {
     sortedAssets.sort((a, b) => b.total_download - a.total_download);
   } else if (trending.value === 'less_tendance') {
     sortedAssets.sort((a, b) => a.total_download - b.total_download);
   }
 
-  // Trier par prix
   if (price.value === 'more_price') {
     sortedAssets.sort((a, b) => a.price - b.price);
   } else if (price.value === 'less_price') {
@@ -116,19 +111,17 @@ const handleDateChange = () => sortAssets();
 const handleTrendingChange = () => sortAssets();
 const handlePriceChange = () => sortAssets();
 const handleSearchInput = () => {
-  // Réinitialiser les critères de tri si la recherche est vide
   if (!query.value) {
     date.value = '';
     trending.value = '';
     price.value = '';
+    assets.value = [...fetchedAssets.value];  
   }
   sortAssets();
 };
 
-
+watch(fetchedAssets, () => {
+  assets.value = [...fetchedAssets.value];
+});
 
 </script>
-
-<style>
-
-</style>

@@ -1,30 +1,33 @@
-import { jwtDecode } from "jwt-decode";
-
-export const useAuth = defineStore('auth', () => {
+export const useAuth = defineStore(
+  "auth",
+  () => {
     const user = ref(null);
-    const token = ref('');
+    const token = ref("");
 
     const isAuthenticated = computed(() => user.value !== null);
 
     const authenticate = (newUser) => {
-        user.value = newUser;
-    }
+      user.value = newUser;
+    };
 
     const logout = () => {
-        user.value = null;
-        token.value = null;
-    }
-
+      user.value = null;
+      token.value = null;
+    };
 
     return {
-        user, 
-        authenticate,
-        token,
-        isAuthenticated,
-        logout,
-    }
-}, { persist: {
-    storage: persistedState.cookiesWithOptions({
-        sameSite: 'strict'
-    })
-} });
+      user,
+      authenticate,
+      token,
+      isAuthenticated,
+      logout,
+    };
+  },
+  {
+    persist: {
+      storage: persistedState.cookiesWithOptions({
+        sameSite: "strict",
+      }),
+    },
+  }
+);
