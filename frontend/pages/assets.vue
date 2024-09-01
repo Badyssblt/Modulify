@@ -1,5 +1,5 @@
 <template>
-  <div class="px-6">
+  <div class="px-6 md:px-12">
     <div>
         <div>
             <h2 class="text-lg font-medium mb-2">Rechercher des composants</h2>
@@ -13,12 +13,22 @@
                 <div>
                     <label for="date">Date</label>
                     <div>
-                        <div>
-                            <input type="radio" name="date" value="new" id="new" v-model="date" @change="handleDateChange">
-                            <label for="new">Du plus récent</label>
-                        </div>
-                        <div>
-                            <input type="radio" name="date" value="old" id="old" v-model="date" @change="handleDateChange">
+                      <div class="flex gap-2 items-center">
+                        <input
+                          type="radio"
+                          name="date"
+                          value="new"
+                          id="new"
+                          v-model="date"
+                          @change="handleDateChange"
+                          class="hidden peer"
+                        />
+                        <label for="new" class="square-radio peer-checked:bg-primary"></label>
+                        <label for="new">Du plus récent</label>
+                      </div>
+                        <div class="flex gap-2 items-center">
+                            <input type="radio" name="date" value="old" id="old" v-model="date" @change="handleDateChange" class="hidden peer">
+                            <label for="old" class="square-radio peer-checked:bg-primary"></label>
                             <label for="old">Du plus ancien</label>
                         </div>
                     </div>
@@ -26,25 +36,29 @@
                 <div>
                     <label for="date">Tendance</label>
                     <div>
-                        <div>
-                            <input type="radio" name="tendance" value="more_tendance" id="more_tendance" v-model="trending" @change="handleTrendingChange">
-                            <label for="more_tendance">Les plus tendances</label>
+                        <div class="flex gap-2 items-center">
+                            <input type="radio" name="tendance" value="more_tendance" id="more_tendance" v-model="trending" @change="handleTrendingChange" class="hidden peer"> 
+                            <label for="more_tendance" class="square-radio peer-checked:bg-primary"></label>
+                            <label for="more_tendance">Du plus tendance</label>
                         </div>
-                        <div>
-                            <input type="radio" name="tendance" value="less_tendance" id="less_tendance" v-model="trending" @change="handleTrendingChange">
-                            <label for="less_tendance">Les moins tendances</label>
+                        <div class="flex gap-2 items-center">
+                            <input type="radio" name="tendance" value="less_tendance" id="less_tendance" v-model="trending" @change="handleTrendingChange" class="hidden peer">
+                            <label for="less_tendance" class="square-radio peer-checked:bg-primary"></label>
+                            <label for="less_tendance">Du moins tendance</label>
                         </div>
                     </div>
                 </div>
                 <div>
                     <label for="date">Prix</label>
                     <div>
-                        <div>
-                            <input type="radio" name="price" value="more_price" id="more_price" v-model="price" @change="handlePriceChange">
+                        <div class="flex gap-2 items-center">
+                            <input type="radio" name="price" value="more_price" id="more_price" v-model="price" @change="handlePriceChange" class="hidden peer">
+                            <label for="more_price" class="square-radio peer-checked:bg-primary"></label>
                             <label for="more_price">Du moins cher</label>
                         </div>
-                        <div>
-                            <input type="radio" name="price" value="less_price" id="less_price" v-model="price" @change="handlePriceChange">
+                        <div class="flex gap-2 items-center">
+                            <input type="radio" name="price" value="less_price" id="less_price" v-model="price" @change="handlePriceChange" class="hidden peer">
+                            <label for="less_price" class="square-radio peer-checked:bg-primary"></label>
                             <label for="less_price">Du plus cher</label>
                         </div>
                     </div>
@@ -125,3 +139,23 @@ watch(fetchedAssets, () => {
 });
 
 </script>
+<style scoped>
+.square-radio {
+  width: 20px; 
+  height: 20px; 
+  border: 1px solid rgba(141, 141, 141, 0.64); 
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 2px;
+  vertical-align: middle; 
+  background: #1C2A33;
+}
+
+input[type="radio"].hidden {
+  display: none;
+}
+
+
+
+
+</style>
