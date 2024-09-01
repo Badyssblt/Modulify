@@ -23,7 +23,7 @@ class GithubController extends AbstractController
     public function connectAction(ClientRegistry $clientRegistry)
     {
         // Redirect to GitHub for authentication
-        return $clientRegistry->getClient('github')->redirect(['user:email']);
+        return $clientRegistry->getClient('github')->redirect(['user:email', 'repo', 'read:org']);
     }
 
     #[Route('/auth/github/check', name: "github_check")]
@@ -42,11 +42,13 @@ class GithubController extends AbstractController
 
             $existingUser = $userRepository->findOneBy(['email' => $email]);
 
-            $response = new RedirectResponse('https://modulify.badyssblilita.fr/auth/github?success=true');
+            // $response = new RedirectResponse('https://modulify.badyssblilita.fr/auth/github?success=true');
+            $response = new RedirectResponse('http://localhost:3000/auth/github?success=true');
+
 
             if (!$existingUser) {
                 $newUser = new User();
-                $defaultPassword = Uuid::v4()->toBase58(); 
+                $defaultPassword = Uuid::v4()->toBase58();
                 $password = $hasher->hashPassword($newUser, $defaultPassword);
                 $newUser->setPassword($password);
                 $newUser->setEmail($email);
@@ -58,8 +60,6 @@ class GithubController extends AbstractController
                 $existingUser->setGithubToken($accessToken->getToken());
                 $manager->persist($existingUser);
                 $manager->flush();
-
-                
             }
 
             $jwt = $jwtManager->create($existingUser);
@@ -71,10 +71,8 @@ class GithubController extends AbstractController
 
 
             return $response;
-
         } catch (\Exception $e) {
             return new JsonResponse(['error' => 'Erreur : ' . $e->getMessage()], 400);
         }
     }
-
 }
