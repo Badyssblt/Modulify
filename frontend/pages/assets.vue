@@ -73,13 +73,14 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { useFetch, useRuntimeConfig } from 'nuxt/app';
+
+
+const route = useRoute();
 
 const date = ref('');
 const trending = ref('');
 const price = ref('');
-const query = ref('');
+const query = ref(route.query.title || '');
 
 const config = useRuntimeConfig();
 const { data: fetchedAssets } = await useFetch(config.public.API_URL + '/api/assets', {
@@ -133,6 +134,12 @@ const handleSearchInput = () => {
   }
   sortAssets();
 };
+
+onMounted(() => {
+  if(query.value !== ''){
+    sortAssets();
+  }
+})
 
 watch(fetchedAssets, () => {
   assets.value = [...fetchedAssets.value];
