@@ -1,4 +1,10 @@
 <template>
+  <div class="absolute w-32 h-32 bg-primary rounded-full blur-[90px] top-96 left-2">
+    </div>
+      <div class="absolute w-32 h-32 bg-primary rounded-full blur-[90px] top-44 left-72">
+      </div>
+      <div class="absolute w-32 h-32 bg-primary rounded-full blur-[90px] top-72 right-0">
+      </div>
   <div class="px-6 md:px-12">
     <div>
         <div>
