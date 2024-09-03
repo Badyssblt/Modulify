@@ -7,9 +7,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class JWTCreatedListener 
 {
-    // src/App/EventListener/JWTCreatedListener.php
-
-
 
 /**
  * @var RequestStack
@@ -33,7 +30,6 @@ public function onJWTCreated(JWTCreatedEvent $event)
 {
     $user = $event->getUser();
 
-    
 
     $payload       = $event->getData();
 

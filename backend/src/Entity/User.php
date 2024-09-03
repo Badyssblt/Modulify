@@ -25,18 +25,18 @@ namespace App\Entity;
         #[ORM\Id]
         #[ORM\GeneratedValue]
         #[ORM\Column]
-        #[Groups(['item:user'])]
+        #[Groups(['item:user', 'collection:asset', 'item:asset'])]
         private ?int $id = null;
 
         #[ORM\Column(length: 180)]
-        #[Groups(['item:user'])]
+        #[Groups(['item:user', 'collection:asset', 'item:asset'])]
         private ?string $email = null;
 
         /**
          * @var list<string> The user roles
          */
         #[ORM\Column]
-        #[Groups(['item:user'])]
+        #[Groups(['item:user', 'collection:asset', 'item:asset'])]
         private array $roles = [];
 
         /**
@@ -46,17 +46,18 @@ namespace App\Entity;
         private ?string $password = null;
 
         #[ORM\Column(length: 255)]
-        #[Groups(['item:user'])]
+        #[Groups(['item:user', 'collection:asset', 'item:asset'])]
         private ?string $name = null;
 
         #[ORM\Column]
-        #[Groups(['item:user'])]
+        #[Groups(['item:user', 'collection:asset'])]
         private ?bool $is_verified = null;
 
         #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName', size: 'imageSize')]
         private ?File $imageFile = null;
 
         #[ORM\Column(nullable: true)]
+        #[Groups(['collection:asset', 'item:asset'])]
         private ?string $imageName = null;
 
         #[ORM\Column(nullable: true)]
@@ -75,10 +76,17 @@ namespace App\Entity;
         #[ORM\Column(type: Types::TEXT, nullable: true)]
         private ?string $github_token = null;
 
+        /**
+         * @var Collection<int, Asset>
+         */
+        #[ORM\OneToMany(targetEntity: Asset::class, mappedBy: 'author')]
+        private Collection $assets;
+
         public function __construct() {
             $this->is_verified = false;
             $this->imageName = "default";
             $this->follow_asset = new ArrayCollection();
+            $this->assets = new ArrayCollection();
         }
 
         public function getId(): ?int
@@ -277,6 +285,36 @@ namespace App\Entity;
         public function setGithubToken(?string $github_token): static
         {
             $this->github_token = $github_token;
+
+            return $this;
+        }
+
+        /**
+         * @return Collection<int, Asset>
+         */
+        public function getAssets(): Collection
+        {
+            return $this->assets;
+        }
+
+        public function addAsset(Asset $asset): static
+        {
+            if (!$this->assets->contains($asset)) {
+                $this->assets->add($asset);
+                $asset->setAuthor($this);
+            }
+
+            return $this;
+        }
+
+        public function removeAsset(Asset $asset): static
+        {
+            if ($this->assets->removeElement($asset)) {
+                // set the owning side to null (unless already changed)
+                if ($asset->getAuthor() === $this) {
+                    $asset->setAuthor(null);
+                }
+            }
 
             return $this;
         }

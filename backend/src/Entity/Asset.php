@@ -84,6 +84,11 @@ class Asset
     #[Groups(['collection:asset', 'item:asset', 'item:user', 'collection:admin:asset'])]
     private ?string $version = null;
 
+    #[ORM\ManyToOne(inversedBy: 'assets')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['collection:asset', 'item:asset'])]
+    private ?User $author = null;
+
     public function __construct() {
         $this->created_at = new DateTimeImmutable();
         $this->is_public = false;
@@ -320,6 +325,18 @@ class Asset
     public function setVersion(string $version): static
     {
         $this->version = $version;
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }
