@@ -1,5 +1,6 @@
 <template>
-    <div >
+    <DirectoryListing :repository="repository" :asset="asset" v-if="isShow" @close="toggleMenu"/>
+    <div>
         <div class="px-6 md:flex gap-32 md:px-12 md:pt-24">
             <div class="md:w-1/2">
                 <h2 class="text-lg font-medium md:text-xl">{{ asset.name }}</h2>
@@ -7,7 +8,7 @@
                 <div>
                     <h3 class="mt-4 text-lg md:text-xl font-bold">{{ asset.price === 0 ? 'Gratuit' : asset.price + ' €' }}</h3>
                     <Button class="mt-4 w-full" @click="downloadFile" :state="loading">{{ asset.price === 0 ? 'Télécharger' : 'Acheter' }}</Button>
-                    <Button class="mt-4 w-full !bg-background border-2 border-primary " :state="loading" @click="uploadGitHub">{{ asset.price === 0 ? 'Importer sur Github' : 'Acheter' }}</Button>
+                    <Button class="mt-4 w-full !bg-background border-2 border-primary " :state="loading" @click="toggleMenu">{{ asset.price === 0 ? 'Importer sur Github' : 'Acheter' }}</Button>
                 </div>
             </div>
 
@@ -33,11 +34,21 @@
 
 <script setup>
 import { useAuth } from '@/store/auth';
+import axios from "axios";
+import { onMounted } from 'vue';
 
     const route = useRoute();
     const config = useRuntimeConfig();
     const loading = ref(false);
     const store = useAuth();
+    const repository = ref();
+
+    const isShow = ref(false);
+
+    const toggleMenu = () => {
+      isShow.value = !isShow.value;
+    }
+    
 
     const { data: asset } = await useFetch(config.public.API_URL + '/api/asset/' + route.params.id);
 
@@ -71,67 +82,20 @@ const downloadFile = async () => {
 }
 
 
-const uploadGitHub = async () => {
+
+
+const getRepository = async () => {
   try {
-    loading.value = true;
-
-    const githubToken = store.user.githubToken; 
-    const owner = store.user.name; 
-    const repo = "SAE202"; 
-    const path = asset.value.file; 
-
-    const response = await $api.get('/api/download/' + asset.value.file, {
-      responseType: 'blob',
-    });
-
-    const reader = new FileReader();
-    reader.readAsDataURL(response.data);
-    reader.onloadend = async () => {
-      const base64File = reader.result.split(',')[1]; 
-
-      const checkResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${githubToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      let sha = null; 
-
-      if (checkResponse.ok) {
-        const fileData = await checkResponse.json();
-        sha = fileData.sha; 
-      }
-
-      const githubResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${githubToken}`, 
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: 'Commit depuis Modulify',
-          content: base64File,
-          sha: sha, 
-        }),
-      });
-
-      const responseData = await githubResponse.json();
-
-      if (!githubResponse.ok) {
-        console.error('GitHub API Error:', responseData);
-        throw new Error('Failed to upload file to GitHub');
-      }
-
-      console.log('File successfully uploaded to GitHub');
-    };
+    const response = await axios.get(`https://api.github.com/users/${store.user.name}/repos`);
+    repository.value = response.data;
   } catch (error) {
-    console.error('Error uploading to GitHub:', error);
-  } finally {
-    loading.value = false;
+    console.log(error);
   }
-};
+}
+
+onMounted(async () => {
+  await getRepository();
+})
 
 </script>
 
