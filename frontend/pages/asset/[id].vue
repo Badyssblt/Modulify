@@ -8,7 +8,7 @@
                 <div>
                     <h3 class="mt-4 text-lg md:text-xl font-bold">{{ asset.price === 0 ? 'Gratuit' : asset.price + ' €' }}</h3>
                     <Button class="mt-4 w-full" @click="downloadFile" :state="loading">{{ asset.price === 0 ? 'Télécharger' : 'Acheter' }}</Button>
-                    <Button class="mt-4 w-full !bg-background border-2 border-primary " :state="loading" @click="toggleMenu">{{ asset.price === 0 ? 'Importer sur Github' : 'Acheter' }}</Button>
+                    <Button class="mt-4 w-full !bg-background border-2 border-primary " @click="toggleMenu">{{ asset.price === 0 ? 'Importer sur Github' : 'Acheter' }}</Button>
                 </div>
             </div>
 

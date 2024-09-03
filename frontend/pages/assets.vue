@@ -72,7 +72,7 @@
             </form>
         </div>
     </div>
-    <Wrapper class="mt-4 relative z-20">
+    <Wrapper class="mt-4 relative z-20 justify-center">
         <Card v-for="asset in assets " :key="asset.id" :asset="asset" />
       </Wrapper>
   </div>
@@ -97,6 +97,7 @@ const { data: fetchedAssets } = await useFetch(config.public.API_URL + '/api/ass
 });
 
 const assets = ref([...fetchedAssets.value]);
+
 
 const sortAssets = () => {
   let sortedAssets = [...fetchedAssets.value]; 

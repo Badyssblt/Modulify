@@ -15,12 +15,16 @@
         <div class="border-b py-4" v-for="item in repository" :key="item.name">
           <h2 @click="seeContent(item.name, '')">{{ item.name }}</h2>
           <ul v-if="content[item.name]" class="ml-4">
-            <button
-              class="bg-primary px-4 rounded-full py-1 my-2"
+            <Button
+              class="bg-primary px-4 rounded-full py-1 my-2 flex justify-center"
               @click="setPath(currentPath[item.name], item.name)"
+              :state="loading"
             >
               Importer ici
-            </button>
+              <svg v-if="uploaded" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+            </Button>
             <li
               v-for="file in content[item.name]"
               :key="file.path"
@@ -51,6 +55,7 @@ const gitStore = useGit();
 const asset = ref(props.asset);
 
 const loading = ref(false);
+const uploaded = ref(false);
 const { $api } = useNuxtApp();
 
 const githubToken = store.user.githubToken;
@@ -89,18 +94,15 @@ const uploadGitHub = async (path, repo) => {
     const githubToken = store.user.githubToken; 
     const owner = store.user.name; 
 
-    // Récupération du fichier à uploader
     const response = await $api.get(`/api/download/${asset.value.file}`, {
       responseType: 'blob',
     });
 
-    // Lecture du fichier en base64
     const reader = new FileReader();
     reader.readAsDataURL(response.data);
     reader.onloadend = async () => {
       const base64File = reader.result.split(',')[1]; 
 
-      // Vérifie si le fichier existe déjà
       const checkResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
         method: 'GET',
         headers: {
@@ -136,7 +138,7 @@ const uploadGitHub = async (path, repo) => {
         throw new Error('Failed to upload file to GitHub');
       }
 
-      console.log('File successfully uploaded to GitHub');
+      uploaded.value = true;
     };
   } catch (error) {
     console.error('Error uploading to GitHub:', error);
