@@ -37,7 +37,10 @@ import { useAuth } from "@/store/auth"
     const isDisabled = ref(false);
     const error = ref(null);
 
+
     const { $api } = useNuxtApp();
+
+
 
     const handleSubmit = async () => {
       error.value = null;

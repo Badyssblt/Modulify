@@ -125,7 +125,7 @@ const follow = async () => {
 }
 
 onMounted(async () => {
-  if(store.githubToken){
+  if(store.user?.githubToken){
     await getRepository();
   }
 })

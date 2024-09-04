@@ -9,7 +9,11 @@
          <DashboardAside current="assets"/>
           <div class="md:flex md:flex-col md:items-center w-full">
               <h2 class="text-center text-lg mt-8 font-medium">Mes assets suivis</h2>
-              
+              <Warning v-if="assets && assets.length === 0" class="mt-4 w-96">Vous ne suivez aucun asset</Warning>
+              <Wrapper class="mt-4 relative z-20 justify-center">
+                <Card v-for="asset in assets" :asset="asset">
+                </Card>
+              </Wrapper>
           </div>
     </div>
   </template>
@@ -25,9 +29,18 @@
   
       const isDisabled = ref(false);
       const error = ref(null);
-  
+
       const { $api } = useNuxtApp();
-  
+      const config = useRuntimeConfig();
+
+      const { data: assets, error: fetchError } = useFetch(config.public.API_URL + '/api/assets/followed', {
+        onRequest({ request, options }) {
+          options.headers = options.headers || {};
+          options.headers.authorization = store.token ? `Bearer ${store.token}` : '';
+        }
+      });
+
+
       const handleSubmit = async () => {
         error.value = null;
         if(email.value === '' || name.value === '' || password.value === ''){
@@ -55,6 +68,10 @@
   
         email.value = store.user.email;
         name.value = store.user.name;
+
+        if(!assets.value){
+          console.error("Assets data are null");
+        }
       })
   
   </script>
