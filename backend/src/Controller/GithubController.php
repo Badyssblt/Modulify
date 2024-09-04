@@ -59,8 +59,8 @@ public function connectCheckAction(UserPasswordHasherInterface $hasher, JWTToken
         }
 
         $jwt = $jwtManager->create($userToUse); // Use the correct user instance
-        $response = new RedirectResponse('https://modulify.badyssblilita.fr/auth/github?success=true');
-        // $response = new RedirectResponse('http://localhost:3000/auth/github?success=true');
+//        $response = new RedirectResponse('https://modulify.badyssblilita.fr/auth/github?success=true');
+         $response = new RedirectResponse('http://localhost:3000/auth/github?success=true');
         $response->headers->setCookie(new Cookie('token', $jwt, 0, '/', null, false, false, false, 'Strict'));
         $response->headers->setCookie(new Cookie('github_token', $accessToken->getToken(), 0, '/', null, false, false, false, 'Strict'));
         $response->headers->setCookie(new Cookie('github_email', $email, 0, '/', null, false, false, false, 'Strict'));

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Asset;
 use App\Repository\AssetRepository;
+use App\Repository\UserRepository;
 use App\Service\FirebaseService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
@@ -169,6 +170,15 @@ class AssetController extends AbstractController
         return $this->json(['message' => 'Vous suivez cet accet', "asset" => $asset], Response::HTTP_OK, [], ["groups" => ["item:asset"]]);
 
 
+    }
+
+
+    #[Route('/assets/followed', name: "app_assets_followed")]
+    public function getFollowed(UserRepository $userRepository)
+    {
+        $user = $this->getUser();
+
+        return $this->json($user->getFollowAsset(), Response::HTTP_OK, [], ['groups' => ['collection:asset']]);
     }
 
 
