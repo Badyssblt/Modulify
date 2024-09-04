@@ -1,5 +1,5 @@
 <template>
-    <header class="py-6 flex justify-between px-6 md:px-12">
+    <header class="py-6 flex justify-between px-6 md:px-12 border-b border-b-gray-600">
         <NuxtLink to="/"><h1 class="text-lg">Modulify</h1></NuxtLink>
         <div v-if="showMenu" class="fixed top-0 right-0 w-full h-screen bg-background z-50 md:hidden" style="z-index: 300">
             <div class="relative h-full">

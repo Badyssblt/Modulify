@@ -10,7 +10,7 @@
         <div class="md:flex md:flex-col md:items-center w-full">
             <h2 class="text-center text-lg mt-8 font-medium">Mon compte</h2>
             <form @submit.prevent="handleSubmit" class="md:flex md:flex-col md:gap-4 md:min-w-[40%] min-w-full">
-              <Warning class="my-4" v-if="store.user.githubToken">
+              <Warning class="my-4" v-if="store.user?.githubToken">
                 Vous ne pouvez pas modifier vos informations en raison de votre méthode de connexion <b>(Github)</b>
               </Warning>
               <Input type="text" label="Votre nom" v-model="name" color="secondary" :disabled="isDisabled"/>
