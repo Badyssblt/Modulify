@@ -7,6 +7,7 @@ namespace App\Entity;
     use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use App\Repository\UserRepository;
+    use phpDocumentor\Reflection\Types\Boolean;
     use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     use Symfony\Component\HttpFoundation\File\File;
     use Symfony\Component\Serializer\Attribute\Groups;
@@ -277,6 +278,12 @@ namespace App\Entity;
             return $this;
         }
 
+        public function isFollow(Asset $asset): bool
+        {
+            if($this->follow_asset->contains($asset)) return true;
+            return false;
+        }
+
         public function getGithubToken(): ?string
         {
             return $this->github_token;
@@ -288,6 +295,7 @@ namespace App\Entity;
 
             return $this;
         }
+
 
         /**
          * @return Collection<int, Asset>

@@ -6,6 +6,7 @@ use App\Entity\Asset;
 use App\Repository\AssetRepository;
 use App\Service\FirebaseService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -58,7 +59,14 @@ class AssetController extends AbstractController
     #[Route('/asset/{id}', name: 'app_assets_item')]
     public function get(Asset $asset)
     {
-        return $this->json($asset, Response::HTTP_OK, [], ['groups' => ['item:asset']]);
+        $user = $this->getUser();
+
+        if($user){
+            $isFollow = $user->isFollow($asset);
+            return $this->json(["asset" => $asset, "isFollow" => $isFollow], Response::HTTP_OK, [], ['groups' => ['item:asset']]);
+        }
+
+        return $this->json(["asset" => $asset, "isFollow" => false], Response::HTTP_OK, [], ['groups' => ['item:asset']]);
     }
 
     #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas la permission pour modifier ce contenu')]
@@ -78,6 +86,7 @@ class AssetController extends AbstractController
         $asset->setHow($formdata['how']);
         $asset->setVersion($formdata['version']);
         $asset->setPublic($formdata['visibility']);
+        $asset->setAuthor($this->getUser());
 
         if ($image instanceof UploadedFile) {
             $asset->setImageFile($image);
@@ -136,8 +145,31 @@ class AssetController extends AbstractController
     return $this->json($asset, Response::HTTP_OK, [], ['groups' => ['item:asset']]);
     }
 
+    #[IsGranted('ROLE_USER')]
+    #[Route('/asset/{id}/follow', name: 'app_asset_follow', methods: ['POST'])]
+    public function followAsset(Asset $asset, EntityManagerInterface $manager, Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if(($user->getFollowAsset())->contains($asset))
+        {
+            $asset->removeFollower($user);
+
+            $manager->persist($asset);
+            $manager->flush();
+
+            return $this->json(['message' => 'Vous ne suivez plus cet accet', "asset" => $asset], Response::HTTP_OK, [], ["groups" => ["item:asset"]]);
+        }
+
+        $asset->addFollower($user);
+
+        $manager->persist($asset);
+        $manager->flush();
+
+        return $this->json(['message' => 'Vous suivez cet accet', "asset" => $asset], Response::HTTP_OK, [], ["groups" => ["item:asset"]]);
 
 
+    }
 
 
 }
