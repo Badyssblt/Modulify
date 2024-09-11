@@ -13,8 +13,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      API_URL: "https://modulify.badyssblilita.fr/v1"
-      // API_URL: "http://localhost:8215"
+      // API_URL: "https://modulify.badyssblilita.fr/v1"
+      API_URL: "http://localhost:8215"
     }
   },
 

@@ -65,6 +65,7 @@ import { onMounted } from 'vue';
       onRequest({request, options}){
         options.headers = options.headers || {}
         options.headers.authorization = token ? `Bearer ${token}` : '';
+
       },
       onResponse({request, response, options}) {
         isFollow.value = response._data.isFollow;
