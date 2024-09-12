@@ -5,7 +5,7 @@
       </div>
       <div class="absolute w-32 h-32 bg-primary rounded-full blur-[90px] top-72 right-0">
       </div>
-  <div class="px-6 md:px-12">
+  <div class="px-6 md:px-12 mt-4">
     <div>
         <div>
             <h2 class="text-lg font-medium mb-2">Rechercher des composants</h2>

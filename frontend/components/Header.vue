@@ -52,6 +52,10 @@ import { useAuth } from "@/store/auth.js"
         showMenu.value = !showMenu.value;
     }
 
+    onMounted(() => {
+
+    })
+
 watch(
     () => store.isAuthenticated,
     (newVal) => {

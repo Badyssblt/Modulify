@@ -55,6 +55,7 @@ import { onMounted } from 'vue';
     const isFollow = ref(null);
 
     const token = store.token;
+    const isAuthenticated = store.isAuthenticated;
 
     const toggleMenu = () => {
       isShow.value = !isShow.value;
@@ -64,7 +65,7 @@ import { onMounted } from 'vue';
       getCachedData: (key) => null,
       onRequest({request, options}){
         options.headers = options.headers || {}
-        options.headers.authorization = token ? `Bearer ${token}` : '';
+        options.headers.authorization = token && isAuthenticated ? `Bearer ${token}` : '';
 
       },
       onResponse({request, response, options}) {
